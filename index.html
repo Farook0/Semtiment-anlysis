@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment Sentiment Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.188);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 70%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #user_comm {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .positive {
+            color: green;
+        }
+        .negative {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Comment Sentiment Analysis</h1>
+        <form id="comm">
+            <input type="text" id="comm_inp" name="comment" placeholder="Enter your comment here">
+            <button type="submit">Analyze</button>
+        </form>
+        <div id="user_comm"></div>
+    </div>
+
+    <script>
+        document.getElementById('comm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const commentInput = document.getElementById('comm_inp').value;
+            const response = await fetch('/analyze', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `comment=${commentInput}`,
+            });
+            const result = await response.json();
+            const userCommentDiv = document.getElementById('user_comm');
+            userCommentDiv.innerHTML = `<p>${result.comment}</p><p class="${result.sentiment.toLowerCase()}">${result.sentiment}</p>`;
+        });
+    </script>
+</body>
+</html>
